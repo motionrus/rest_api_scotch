@@ -15,9 +15,9 @@ class ModelTestCase(TestCase):
     def setUp(self):
         """Define the test client and other test variables."""
         user = User.objects.create(username="nerd")
-        self.bucketlist_name = "Write wourld class code"
+        self.name = "Write wourld class code"
         # specify owner of a bucketlist
-        self.bucketlist = Bucketlist(name=self.bucketlist_name, owner=user)
+        self.bucketlist = Bucketlist(name=self.name, owner=user)
 
     def test_model_can_create_a_bucketlist(self):
         old_count = Bucketlist.objects.count()
@@ -53,7 +53,7 @@ class ViewTestCase(TestCase):
         """Test that the api has user authorization."""
         new_client = APIClient()
         res = new_client.get('/bucketlist/', kwargs={'pk': 3}, format="json")
-        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_api_can_get_a_bucketlist(self):
         """Test the api can get a given bucketlist."""
@@ -62,7 +62,6 @@ class ViewTestCase(TestCase):
                                    kwargs={'pk': bucketlist.id},
                                    format="json"
                                    )
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertContains(response, bucketlist)
 
