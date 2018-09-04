@@ -2,9 +2,10 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import generics, permissions
-from .serializers import BucketlistSerializer
+from .serializers import BucketlistSerializer, UserSerializer
 from .models import Bucketlist
 from .permission import IsOwner
+from django.contrib.auth.models import User
 
 
 class CreateView(generics.ListCreateAPIView):
@@ -22,9 +23,22 @@ class CreateView(generics.ListCreateAPIView):
         user = self.request.user
         return Bucketlist.objects.filter(owner=user)
 
+
 class DetailsView(generics.RetrieveUpdateDestroyAPIView):
     """This class handles the http GET, PUT and DELETE requests."""
 
     queryset = Bucketlist.objects.all()
     serializer_class = BucketlistSerializer
     permission_classes = (permissions.IsAuthenticated, IsOwner)
+
+
+class UserView(generics.ListAPIView):
+    """View to list the user queryset."""
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserDetailsView(generics.RetrieveAPIView):
+    """View to retrieve a user instance."""
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

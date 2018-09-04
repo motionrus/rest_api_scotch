@@ -52,13 +52,13 @@ class ViewTestCase(TestCase):
     def test_authorization_is_enforces(self):
         """Test that the api has user authorization."""
         new_client = APIClient()
-        res = new_client.get('/bucketlist/', kwargs={'pk': 3}, format="json")
+        res = new_client.get('/bucketlists/', kwargs={'pk': 3}, format="json")
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_api_can_get_a_bucketlist(self):
         """Test the api can get a given bucketlist."""
         bucketlist = Bucketlist.objects.get(id=1)
-        response = self.client.get('/bucketlist/',
+        response = self.client.get('/bucketlists/',
                                    kwargs={'pk': bucketlist.id},
                                    format="json"
                                    )
